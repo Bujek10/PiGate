@@ -1,0 +1,50 @@
+{% extends "bootstrap/base.html" %}
+{% block scripts %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+{% block title %} Smart Gate Management Project - {{ title }}{% endblock %}
+{% block navbar %}
+    {% if current_user.is_authenticated %}
+        {% include "includes/navbar-login.html" %}
+    {% else %}
+        {% include "includes/navbar.html" %}
+    {% endif %}
+{% endblock %}
+{%  block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="row my-3">
+            <div>
+                <h2 style="text-align: center">Rejestracja</h2>
+            </div>
+            <div class="col-lg-4 offset-lg-4 my-3">
+                <form action="" method="post">
+                    {{ registerForm.hidden_tag() }}
+                    {{ registerForm.userLogin.label(class="form-label") }}
+                    {{ registerForm.userLogin(class="form-control", placeholder="Login") }}
+                    {{ registerForm.userPass.label(class="form-label") }}
+                    {{ registerForm.userPass(class="form-control", placeholder="Password") }}
+                    {{ registerForm.firstName.label(class="form-label") }}
+                    {{ registerForm.firstName(class="form-control", placeholder="First name") }}
+                    {{ registerForm.lastName.label(class="form-label") }}
+                    {{ registerForm.lastName(class="form-control", placeholder="First name") }}
+                    {{ registerForm.submit(class="btn btn-outline-secondary btn-sm float-end mt-3") }}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

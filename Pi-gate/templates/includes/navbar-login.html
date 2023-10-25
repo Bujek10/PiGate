@@ -1,0 +1,27 @@
+<nav class="navbar bg-body navbar-expand-lg py-3">
+    <div class="col-lg-12 d-flex justify-content-between px-5">
+        <a class="navbar-brand d-flex align-items-lg-center" href="/dashboard">
+            <i class="bi bi-bookmarks"></i>
+            <span>Smart Gate Management Project</span>
+        </a>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                {% if current_user.is_authenticated %}
+                    Witaj, {{ current_user.firstName }}
+                {% endif %}
+            </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+                <a class="dropdown-item" href="/registerPlates">Dodaj tablice</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="/register">Dodaj użytkowników</a>
+            </li>
+            <li class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item" href="/logout">Wyloguj</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+</nav>
