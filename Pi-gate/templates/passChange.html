@@ -29,18 +29,18 @@
         </div>
         <div class="row my-3">
             <div>
-                <h2 style="text-align: center">Dodawanie tablic rejestracyjnych</h2>
+                <h2 style="text-align: center">Zmiana hasła</h2>
             </div>
             <div class="col-lg-4 offset-lg-4 my-3">
                 <form action="" method="post">
-                    {{ registerFormPlates.hidden_tag() }}
-                    {{ registerFormPlates.firstName.label(class="form-label") }}
-                    {{ registerFormPlates.firstName(class="form-control", placeholder="First Name") }}
-                    {{ registerFormPlates.lastName.label(class="form-label") }}
-                    {{ registerFormPlates.lastName(class="form-control", placeholder="Last Name") }}
-                    {{ registerFormPlates.userPlate.label(class="form-label") }}
-                    {{ registerFormPlates.userPlate(class="form-control", placeholder="Plate number") }}
-                    {{ registerFormPlates.submit(class="btn btn-outline-secondary btn-sm float-end mt-3") }}
+                    {{ passChangeForm.hidden_tag() }}
+                    {{ passChangeForm.userPass.label(class="form-label") }}
+                    {{ passChangeForm.userPass(class="form-control", placeholder="Old password") }}
+                    {{ passChangeForm.newPass.label(class="form-label") }}
+                    {{ passChangeForm.newPass(class="form-control", placeholder="New password") }}
+                    {{ passChangeForm.repeatPass.label(class="form-label") }}
+                    {{ passChangeForm.repeatPass(class="form-control", placeholder="Repeat password") }}
+                    {{ passChangeForm.submit(class="btn btn-outline-secondary btn-sm float-end mt-3") }}
                 </form>
             </div>
         </div>

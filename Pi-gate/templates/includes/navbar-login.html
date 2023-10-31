@@ -1,8 +1,7 @@
 <nav class="navbar bg-body navbar-expand-lg py-3">
     <div class="col-lg-12 d-flex justify-content-between px-5">
         <a class="navbar-brand d-flex align-items-lg-center" href="/dashboard">
-            <i class="bi bi-bookmarks"></i>
-            <span>Smart Gate Management Project</span>
+            <h4 class="bi bi-bookmarks">Smart Gate Management Project</h4>
         </a>
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown">
@@ -12,14 +11,25 @@
             </button>
         <ul class="dropdown-menu dropdown-menu-end">
             <li>
-                <a class="dropdown-item" href="/registerPlates">Dodaj tablice</a>
+                <a class="dropdown-item" href="/usersTable">Baza użytkowników</a>
             </li>
-            <li>
-                <a class="dropdown-item" href="/register">Dodaj użytkowników</a>
-            </li>
+
             <li class="dropdown-divider"></li>
+
             <li>
-                <a class="dropdown-item" href="/logout">Wyloguj</a>
+                <a class="dropdown-item" href="/registerUsers">Dodaj użytkowników</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="/register">Dodaj administratorów</a>
+            </li>
+
+            <li class="dropdown-divider"></li>
+
+            <li>
+                <a class="dropdown-item" href="/passChange">Zmień hasło</a>
+            </li>
+            <li>
+                <a class="dropdown-item text-danger" href="/logout">Wyloguj</a>
             </li>
         </ul>
         </div>

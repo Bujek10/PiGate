@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, flash
+from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_bs4 import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -18,9 +18,9 @@ bcrypt = Bcrypt(app)
 baseDir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(baseDir, 'data/database.db')
 db = SQLAlchemy(app)
-path2='sqlite:///' + os.path.join(baseDir, 'data/databasePlates.db')
+path2='sqlite:///' + os.path.join(baseDir, 'data/databaseUsers.db')
 app.config['SQLALCHEMY_BINDS'] = {
-        'dbPlates': path2
+        'dbUsers': path2
 }
 
 # tabela bazy danych użytkowników
@@ -39,15 +39,16 @@ class Users(db.Model, UserMixin):
 
 
 # tabela bazy danych tablic rejestracyjnych
-class UsersPlates(db.Model, UserMixin):
+class UsersData(db.Model, UserMixin):
     """
     Tabela z użytkownikami i rejestracjami
     """
-    __bind_key__ = 'dbPlates'
+    __bind_key__ = 'dbUsers'
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(50))
     lastName = db.Column(db.String(50))
     userPlate = db.Column(db.String(10), unique=True)
+    userTag = db.Column(db.String(15), unique=True)
 
 
 # konfiguracja Flask-Login
@@ -71,6 +72,16 @@ class Register(FlaskForm):
     lastName = StringField('Nazwisko:', validators=[DataRequired(), Length(min=3, max=50)])
     submit = SubmitField('Rejestruj')
 
+class passwordChange(FlaskForm):
+    """
+    Formularz do zmiany hasła
+    """
+    userPass = PasswordField('Stare hasło:', validators=[DataRequired(), Length(min=3, max=50)])
+    newPass = PasswordField('Nowe hasło:', validators=[DataRequired(), Length(min=3, max=50)])
+    repeatPass = PasswordField('Powtórz nowe hasło:', validators=[DataRequired(), Length(min=3, max=50)])
+    submit = SubmitField('Potwierdź')
+
+
 class Login(FlaskForm):
     """
     Formularz logowania użytkowników
@@ -79,14 +90,23 @@ class Login(FlaskForm):
     userPass = PasswordField('Hasło:', validators=[DataRequired(), Length(min=3, max=50)])
     submit = SubmitField('Zaloguj')
 
-class RegisterPlates(FlaskForm):
+class RegisterUsers(FlaskForm):
     """
     Formularz dodawania użytkowników i tablic
     """
     firstName = StringField('Imię:', validators=[DataRequired(), Length(min=3, max=50)])
     lastName = StringField('Nazwisko:', validators=[DataRequired(), Length(min=3, max=50)])
-    userPlate = StringField('Tablica rejestracyjna:', validators=[DataRequired(), Length(min=3, max=10)])
-    submit = SubmitField('Dodaj')
+    userPlate = StringField('Tablica rejestracyjna:', validators=[Length(min=0, max=10)])
+    userTag = StringField('Tag RFID/NFC:', validators=[Length(min=0, max=15)])
+    submit = SubmitField('Potwierdź')
+
+class RegisterUsersDel(FlaskForm):
+    """
+    Przycisk do usuwania wpisu
+    """
+    submit = SubmitField('Usuń')
+
+
 
 @app.route('/')
 def index():
@@ -110,26 +130,53 @@ def login():
     return render_template('login.html', title='Logowanie', loginForm=loginForm)
 
 
-@app.route('/registerPlates', methods=['POST', 'GET'])
+@app.route('/registerUsers', methods=['POST', 'GET'])
 @login_required
-def registerPlates():
-    registerFormPlates = RegisterPlates()
-    if registerFormPlates.validate_on_submit():
+def registerUsers():
+    registerFormUsers = RegisterUsers()
+    if registerFormUsers.validate_on_submit():
         try:
-            newUserPlate = UsersPlates(
-                firstName=registerFormPlates.firstName.data,
-                lastName=registerFormPlates.lastName.data,
-                userPlate=registerFormPlates.userPlate.data
-            )
-            db.session.add(newUserPlate)
-            db.session.commit()
-            flash('Rejestracja została dodana poprawnie', 'success')
-            return redirect(url_for('platesTable'))
+            if (registerFormUsers.userPlate.data == "" or registerFormUsers.userPlate.data.capitalize() == "Brak")  and (registerFormUsers.userTag.data == "" or registerFormUsers.userTag.data.capitalize() == "Brak"):
+                flash('Dodaj conajmniej jeden sposób autoryzacji', 'danger')
+            elif registerFormUsers.userPlate.data == "":
+                newUserPlate = UsersData(
+                    firstName=registerFormUsers.firstName.data.capitalize(),
+                    lastName=registerFormUsers.lastName.data.capitalize(),
+                    userTag=registerFormUsers.userTag.data
+                )
+                db.session.add(newUserPlate)
+                db.session.commit()
+                flash('Użytkowmik został dodany poprawnie', 'success')
+                return redirect(url_for('usersTable'))
+            elif registerFormUsers.userTag.data=="":
+                newUserPlate = UsersData(
+                    firstName=registerFormUsers.firstName.data.capitalize(),
+                    lastName=registerFormUsers.lastName.data.capitalize(),
+                    userPlate=registerFormUsers.userPlate.data.upper(),
+                )
+                db.session.add(newUserPlate)
+                db.session.commit()
+                flash('Użytkowmik został dodany poprawnie', 'success')
+                return redirect(url_for('usersTable'))
+            else:
+                newUserPlate = UsersData(
+                    firstName=registerFormUsers.firstName.data.capitalize(),
+                    lastName=registerFormUsers.lastName.data.capitalize(),
+                    userPlate=registerFormUsers.userPlate.data.upper(),
+                    userTag=registerFormUsers.userTag.data
+                )
+                db.session.add(newUserPlate)
+                db.session.commit()
+                flash('Użytkownik został dodany poprawnie', 'success')
+                return redirect(url_for('usersTable'))
+
         except Exception:
             db.session.rollback()
-            registerFormPlates.userPlate.data=""
-            flash('Rejestracja już istnieje w bazie. Proszę wybrać inną.', 'danger')
-    return render_template('registerPlates.html', title='Dodawanie tablic', registerFormPlates=registerFormPlates)
+            registerFormUsers.userTag.data = ""
+            registerFormUsers.userPlate.data = ""
+            flash('Rejestracja lub Tag już istnieje w bazie. Podaj dane ponownie.', 'danger')
+
+    return render_template('registerUsers.html', title='Dodawanie tablic', registerFormUsers=registerFormUsers)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -140,8 +187,8 @@ def register():
             newUser = Users(
                 userLogin=registerForm.userLogin.data,
                 userPass=hashedPass,
-                firstName=registerForm.firstName.data,
-                lastName=registerForm.lastName.data
+                firstName=registerForm.firstName.data.capitalize(),
+                lastName=registerForm.lastName.data.capitalize()
             )
             db.session.add(newUser)
             db.session.commit()
@@ -153,11 +200,63 @@ def register():
             flash('Nazwa użytkownika istnieje. Proszę wybrać inną.', 'danger')
     return render_template('register.html', title='Rejestracja', registerForm=registerForm)
 
-@app.route('/platesTable')
+@app.route('/usersTable', methods=['GET', 'POST'])
 @login_required
-def platesTable():
-    databasePlates = UsersPlates.query.all()
-    return render_template('platesTable.html', title='Tablice', databasePlates=databasePlates)
+def usersTable():
+    databaseUsers = UsersData.query.order_by(UsersData.lastName.asc()).all()
+    registerFormUsersDel = RegisterUsersDel()
+    registerFormUsersEdit = RegisterUsers()
+    if registerFormUsersEdit.validate_on_submit():
+        try:
+            targetId = request.form.get('ID')
+            userEdit=UsersData.query.get(targetId)
+
+            userEdit.firstName = registerFormUsersEdit.firstName.data.capitalize()
+            userEdit.lastName = registerFormUsersEdit.lastName.data.capitalize()
+
+            if (registerFormUsersEdit.userTag.data.capitalize() == "Brak" or registerFormUsersEdit.userTag.data == "") and (registerFormUsersEdit.userPlate.data.capitalize() == "Brak" or registerFormUsersEdit.userPlate.data == ""):
+                flash ('Podaj conajmniej jeden sposób autoryzacji', 'danger')
+            elif registerFormUsersEdit.userTag.data.capitalize=="Brak" or registerFormUsersEdit.userTag.data=="":
+                userEdit.userTag = None
+                userEdit.userPlate = registerFormUsersEdit.userPlate.data.upper()
+                db.session.commit()
+                flash('Wpis został edytowany', 'success')
+                return redirect(url_for('usersTable'))
+            elif registerFormUsersEdit.userPlate.data.capitalize()=="Brak" or registerFormUsersEdit.userPlate.data=="":
+                userEdit.userPlate = None
+                userEdit.userTag = registerFormUsersEdit.userTag.data
+                db.session.commit()
+                flash('Wpis został edytowany', 'success')
+                return redirect(url_for('usersTable'))
+            else:
+                userEdit.userPlate = registerFormUsersEdit.userPlate.data.upper()
+                userEdit.userTag = registerFormUsersEdit.userTag.data
+                db.session.commit()
+                flash('Wpis został edytowany', 'success')
+                return redirect(url_for('usersTable'))
+
+
+        # except nie działa przez if w try
+        except Exception:
+            db.session.rollback()
+            flash('Błąd edycji', 'danger')
+
+    elif registerFormUsersDel.validate_on_submit():
+        try:
+            targetIdDel = request.form.get('IDdel')
+            userDel=UsersData.query.get(targetIdDel)
+            db.session.delete(userDel)
+            db.session.commit()
+            flash('Wpis został usunięty', 'success')
+            return redirect(url_for('usersTable'))
+        except Exception:
+            db.session.rollback()
+            flash('Błąd usuwania', 'danger')
+    else:
+        pass
+
+    return render_template('usersTable.html', title='Tablice', databaseUsers=databaseUsers, registerFormUsersEdit=registerFormUsersEdit, registerFormUsersDel=registerFormUsersDel)
+
 
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -171,8 +270,40 @@ def logout():
 def dashboard():
     return render_template('dashboard.html', title='Dashboard')
 
+@app.route('/passChange', methods=['POST', 'GET'])
+@login_required
+def passChange():
+    currentUser = Users.query.filter_by(id=current_user.id).first()
+    passChangeForm = passwordChange()
+    if passChangeForm.validate_on_submit():
+        try:
+            hashedPassOldGood = bcrypt.check_password_hash(currentUser.userPass, passChangeForm.userPass.data)
+            hashedPassNew = bcrypt.generate_password_hash(passChangeForm.newPass.data)
+            hashedPassRepeatGood = bcrypt.check_password_hash(hashedPassNew, passChangeForm.repeatPass.data)
+
+            if hashedPassOldGood:
+                if hashedPassRepeatGood:
+                    currentUser.userPass=hashedPassNew
+                    db.session.commit()
+                    flash('Hasło zostało zmienione.', 'success')
+                    return redirect(url_for('dashboard'))
+                else:
+                    flash('Hasła się nie zgadzają.', 'danger')
+            else:
+                flash('Błędne stare hasło.', 'danger')
+
+        except Exception:
+            flash('Hasło nie zostało zmienione.', 'danger')
+            return redirect(url_for('dashboard'))
+
+    return render_template('passChange.html', title='Zmiana hasła', passChangeForm=passChangeForm)
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        db.create_all(bind='dbPlates')
+        db.create_all(bind='dbUsers')
     app.run(debug=True)
+
+
+
