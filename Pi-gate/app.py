@@ -72,6 +72,21 @@ class Register(FlaskForm):
     lastName = StringField('Nazwisko:', validators=[DataRequired(), Length(min=3, max=50)])
     submit = SubmitField('Rejestruj')
 
+class administratorEdit(FlaskForm):
+    """
+    Formularz edycji administratorów
+    """
+    userLogin = StringField('Login:', validators=[DataRequired(), Length(min=3, max=50)])
+    firstName = StringField('Imię:', validators=[DataRequired(), Length(min=3, max=50)])
+    lastName = StringField('Nazwisko:', validators=[DataRequired(), Length(min=3, max=50)])
+    submit = SubmitField('Edytuj')
+
+class RegisterAdminDel(FlaskForm):
+    """
+    Przycisk do usuwania wpisu
+    """
+    submit = SubmitField('Usuń')
+
 class passwordChange(FlaskForm):
     """
     Formularz do zmiany hasła
@@ -193,7 +208,7 @@ def register():
             db.session.add(newUser)
             db.session.commit()
             flash('Konto zostało utworzone poprawnie', 'success')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('adminTable'))
         except Exception:
             db.session.rollback()
             registerForm.userLogin.data = ""
@@ -235,8 +250,6 @@ def usersTable():
                 flash('Wpis został edytowany', 'success')
                 return redirect(url_for('usersTable'))
 
-
-        # except nie działa przez if w try
         except Exception:
             db.session.rollback()
             flash('Błąd edycji', 'danger')
@@ -257,6 +270,49 @@ def usersTable():
 
     return render_template('usersTable.html', title='Tablice', databaseUsers=databaseUsers, registerFormUsersEdit=registerFormUsersEdit, registerFormUsersDel=registerFormUsersDel)
 
+
+@app.route('/adminTable', methods=['GET', 'POST'])
+@login_required
+def adminTable():
+    databaseAdmin = Users.query.order_by(Users.lastName.asc()).all()
+    registerFormAdminDel = RegisterAdminDel()
+    registerFormAdminEdit = administratorEdit()
+    if registerFormAdminEdit.validate_on_submit():
+        try:
+            targetId = request.form.get('ID')
+            adminEdit=Users.query.get(targetId)
+
+            if (registerFormAdminEdit.userLogin.data=="Brak" or registerFormAdminEdit.userLogin.data=="" or registerFormAdminEdit.firstName.data=="Brak" or registerFormAdminEdit.firstName.data=="" or registerFormAdminEdit.lastName.data=="Brak" or registerFormAdminEdit.lastName.data==""):
+                flash('Wypełnij wszystkie pola.', 'danger')
+            else:
+                adminEdit.userLogin = registerFormAdminEdit.userLogin.data
+                adminEdit.firstName = registerFormAdminEdit.firstName.data.capitalize()
+                adminEdit.lastName = registerFormAdminEdit.lastName.data.capitalize()
+                db.session.commit()
+                flash('Wpis został edytowany', 'success')
+                return redirect(url_for('adminTable'))
+        except Exception:
+            db.session.rollback()
+            flash('Błąd edycji', 'danger')
+    elif registerFormAdminDel.validate_on_submit():
+        try:
+            targetIdDel = request.form.get('IDdel')
+            adminDel=Users.query.get(targetIdDel)
+            print(current_user.id, targetIdDel)
+            if int(targetIdDel)==int(current_user.id):
+                flash('Nie można usunąć swojego konta', 'danger')
+            else:
+                db.session.delete(adminDel)
+                db.session.commit()
+                flash('Administrator został usunięty', 'success')
+                return redirect(url_for('adminTable'))
+        except Exception:
+            db.session.rollback()
+            flash('Błąd usuwania', 'danger')
+    else:
+        pass
+
+    return render_template('adminTable.html', title='Administratorzy', databaseAdmin=databaseAdmin, registerFormAdminEdit=registerFormAdminEdit, registerFormAdminDel=registerFormAdminDel)
 
 
 @app.route('/logout', methods=['POST', 'GET'])

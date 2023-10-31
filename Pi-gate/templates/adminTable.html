@@ -1,0 +1,121 @@
+{% extends "bootstrap/base.html" %}
+{% block scripts %}
+    {{ super() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
+{% block title %} Smart Gate Management Project - {{ title }}{% endblock %}
+{% block navbar %}
+    {% if current_user.is_authenticated %}
+        {% include "includes/navbar-login.html" %}
+    {% else %}
+        {% include "includes/navbar.html" %}
+    {% endif %}
+{% endblock %}
+{%  block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="">
+            <div class="d-flex justify-content-center">
+                <h3 class="">Tabela administratorów</h3>
+            </div>
+            <div class="d-flex justify-content-center mt-1">
+                <button class="btn btn-dark bi bi-plus-lg"> <a class="text-reset text-decoration-none" href="/register">Dodaj administratora </a> </button>
+            </div>
+        </div>
+        <table class="table table-hover table-striped mt-3">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center align-middle">ID</th>
+                    <th scope="col" class="text-center align-middle">Login</th>
+                    <th scope="col" class="text-center align-middle">Imię</th>
+                    <th scope="col" class="text-center align-middle">Nazwisko</th>
+                    <th scope="col" class="text-center align-middle">Opcje</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for admin in databaseAdmin %}
+
+                <tr>
+                    <th scope="row" class="text-center align-middle">{{admin.id}}</th>
+                    <td class="text-center align-middle">{{admin.userLogin}}</td>
+                    <td class="text-center align-middle">{{admin.firstName}}</td>
+                    <td class="text-center align-middle">{{admin.lastName}}</td>
+
+
+                    <td class="text-center align-middle">
+                        <button type="button" class="btn btn-outline-primary bi bi-pencil-fill m-1" data-bs-toggle="modal" data-bs-target="#exampleModal{{admin.id}}">
+                        </button>
+                        <div class="modal fade" id="exampleModal{{admin.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100 id="exampleModalLabel">Edytuj użytkownika "{{admin.firstName}} {{admin.lastName}}" </h5>
+                                    </div>
+
+                                    <div class="modal-body text-start">
+                                        <form action="" method="post">
+                                            {{ registerFormAdminEdit.hidden_tag() }}
+                                            <input type="hidden" name="ID" value="{{admin.id}}">
+                                            {{ registerFormAdminEdit.userLogin.label(class="form-label") }}
+                                            {{ registerFormAdminEdit.userLogin(class="form-control", placeholder="First Name", value=admin.userLogin) }}
+                                            {{ registerFormAdminEdit.firstName.label(class="form-label") }}
+                                            {{ registerFormAdminEdit.firstName(class="form-control", placeholder="Last Name", value=admin.firstName) }}
+                                            {{ registerFormAdminEdit.lastName.label(class="form-label") }}
+                                            {{ registerFormAdminEdit.lastName(class="form-control", placeholder="Plate number", value=admin.lastName) }}
+
+                                    </div>
+                                            <div class="modal-footer btn-group d-md-flex justify-content-center">
+                                                <button type="button" class="btn btn-secondary col-5" data-bs-dismiss="modal">Cofnij</button>
+                                                {{ registerFormAdminEdit.submit(class="btn btn-primary col-5") }}
+                                            </div>
+                                        </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-danger bi bi-trash3-fill m-1" data-bs-toggle="modal" data-bs-target="#exampleModal2{{admin.id}}">
+                        </button>
+                        <div class="modal fade" id="exampleModal2{{admin.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <h5 class="modal-title w-100" id="exampleModalLabel">Usuń użytkownika "{{admin.firstName}} {{admin.lastName}}"</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h6>Czy na pewno chcesz usunąć tą tablicę?</h6>
+                                    </div>
+                                        <form action="" method="post">
+                                            {{ registerFormAdminDel.hidden_tag() }}
+                                            <input type="hidden" name="IDdel" value="{{admin.id}}">
+                                            <div class="modal-footer btn-group d-md-flex justify-content-center">
+                                                <button type="button" class="btn btn-secondary col-5" data-bs-dismiss="modal">Cofnij</button>
+                                                {{ registerFormAdminDel.submit(class="btn btn-danger col-5") }}
+                                            </div>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
