@@ -59,17 +59,17 @@
                     {%if content.userPlate %}
                     <td class="text-center align-middle">{{content.userPlate}}</td>
                     {% else %}
-                    <td class="text-center align-middle">Brak</td>
+                    <td class="text-center align-middle text-primary">Brak</td>
                     {% endif %}
 
                     {%if content.userTag %}
                     <td class="text-center align-middle">{{content.userTag}}</td>
                     {% else %}
-                    <td class="text-center align-middle">Brak</td>
+                    <td class="text-center align-middle text-primary">Brak</td>
                     {% endif %}
 
                     <td class="text-center align-middle">
-                        <button type="button" class="btn btn-outline-success bi bi-clock-fill m-1">
+                    <button type="button" class="btn btn-outline-success bi bi-clock-fill m-1">
                         </button>
                         <button type="button" class="btn btn-outline-primary bi bi-pencil-fill m-1" data-bs-toggle="modal" data-bs-target="#exampleModal{{content.id}}">
                         </button>
@@ -79,12 +79,6 @@
                                     <div class="modal-header text-center">
                                         <h5 class="modal-title w-100 id="exampleModalLabel">Edytuj użytkownika "{{content.firstName}} {{content.lastName}}" </h5>
                                     </div>
-
-                                    {% if content.userPlate%}
-                                    plateValue=content.userPlate
-                                    {% else %}
-                                    plateValue="Brak"
-                                    {% endif %}
 
                                     <div class="modal-body text-start">
                                         <form action="" method="post">
