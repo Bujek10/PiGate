@@ -121,6 +121,10 @@ class RegisterUsersDel(FlaskForm):
     """
     submit = SubmitField('Usuń')
 
+# class hours(FlaskForm):
+#     """Formularz godzin dostępu"""
+#     monFrom = StringField('Od', validators=[Length(min=1, max=2)])
+#     monTo =
 
 
 @app.route('/')
@@ -128,12 +132,20 @@ def index():
     return render_template('index.html', title='Home')
 
 
-
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     user = Users.query.all()
     if not user:
         return redirect(url_for('register'))
+
+        # firstUser = Users(
+        #     userLogin="Admin",
+        #     userPass=bcrypt.generate_password_hash("Admin"),
+        #     firstName="Admin",
+        #     lastName="Admin"
+        # db.session.add(firstUser)
+        # db.session.commit()
+
     else:
         loginForm = Login()
         if loginForm.validate_on_submit():
@@ -312,7 +324,7 @@ def adminTable():
     else:
         pass
 
-    return render_template('adminTable.html', title='Administratorzy', databaseAdmin=databaseAdmin, registerFormAdminEdit=registerFormAdminEdit, registerFormAdminDel=registerFormAdminDel)
+    return render_template('adminTableOld.html', title='Administratorzy', databaseAdmin=databaseAdmin, registerFormAdminEdit=registerFormAdminEdit, registerFormAdminDel=registerFormAdminDel)
 
 
 @app.route('/logout', methods=['POST', 'GET'])
@@ -353,6 +365,12 @@ def passChange():
             return redirect(url_for('dashboard'))
 
     return render_template('passChange.html', title='Zmiana hasła', passChangeForm=passChangeForm)
+
+@app.route('/setTime', methods=['POST', 'GET'])
+@login_required
+def setTime():
+    return render_template('setTime.html', title='Godziny dostępu')
+
 
 
 if __name__ == '__main__':
