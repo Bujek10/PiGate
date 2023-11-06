@@ -70,7 +70,7 @@ class Register(FlaskForm):
     userPass = PasswordField('Hasło:', validators=[DataRequired(), Length(min=3, max=50)])
     firstName = StringField('Imię:', validators=[DataRequired(), Length(min=3, max=50)])
     lastName = StringField('Nazwisko:', validators=[DataRequired(), Length(min=3, max=50)])
-    submit = SubmitField('Rejestruj')
+    submit = SubmitField('Dodaj')
 
 class administratorEdit(FlaskForm):
     """
@@ -136,16 +136,15 @@ def index():
 def login():
     user = Users.query.all()
     if not user:
-        return redirect(url_for('register'))
-
-        # firstUser = Users(
-        #     userLogin="Admin",
-        #     userPass=bcrypt.generate_password_hash("Admin"),
-        #     firstName="Admin",
-        #     lastName="Admin"
-        # db.session.add(firstUser)
-        # db.session.commit()
-
+        firstUser = Users(
+            userLogin="Admin",
+            userPass=bcrypt.generate_password_hash("Admin"),
+            firstName="Administrator",
+            lastName="Admin"
+        )
+        db.session.add(firstUser)
+        db.session.commit()
+        return redirect(url_for('login'))
     else:
         loginForm = Login()
         if loginForm.validate_on_submit():
@@ -173,7 +172,7 @@ def registerUsers():
                 )
                 db.session.add(newUserPlate)
                 db.session.commit()
-                flash('Użytkowmik został dodany poprawnie', 'success')
+                flash('Użytkownik został dodany poprawnie', 'success')
                 return redirect(url_for('usersTable'))
             elif registerFormUsers.userTag.data=="":
                 newUserPlate = UsersData(
@@ -183,7 +182,7 @@ def registerUsers():
                 )
                 db.session.add(newUserPlate)
                 db.session.commit()
-                flash('Użytkowmik został dodany poprawnie', 'success')
+                flash('Użytkownik został dodany poprawnie', 'success')
                 return redirect(url_for('usersTable'))
             else:
                 newUserPlate = UsersData(
@@ -206,6 +205,7 @@ def registerUsers():
     return render_template('registerUsers.html', title='Dodawanie tablic', registerFormUsers=registerFormUsers)
 
 @app.route('/register', methods=['POST', 'GET'])
+@login_required
 def register():
     registerForm = Register()
     if registerForm.validate_on_submit():
@@ -366,10 +366,11 @@ def passChange():
 
     return render_template('passChange.html', title='Zmiana hasła', passChangeForm=passChangeForm)
 
-@app.route('/setTime', methods=['POST', 'GET'])
+@app.route('/setTime/id/<int:user_id>', methods=['POST', 'GET'])
 @login_required
-def setTime():
-    return render_template('setTime.html', title='Godziny dostępu')
+def setTime(user_id):
+    currentUser = UsersData.query.filter_by(id=user_id).first()
+    return render_template('setTime.html', title='Godziny dostępu', currentUser=currentUser)
 
 
 
