@@ -35,271 +35,273 @@
         <div class="content">
             <div class="mt-5">
                 <form action="" method="post">
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
-                        <div class="form-group col-2 align-items-center d-flex justify-content-center">
-                        <h5 class="my-auto">Poniedziałek</h5>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Od
+                    {{hoursForm.hidden_tag()}}
+                        <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-2 align-items-center d-flex justify-content-center">
+                            <h5 class="my-auto">Poniedziałek</h5>
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Od
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.monFromH(class="form-control text-center", placeholder="h", value=currentUser.monFromH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.monFromM(class="form-control text-center", placeholder="m", value=currentUser.monFromM)}}
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour1" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute1" placeholder="mm">
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Do
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.monToH(class="form-control text-center", placeholder="h", value=currentUser.monToH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.monToM(class="form-control text-center", placeholder="m", value=currentUser.monToM)}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Do
+                        <br>
+                        <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-2 d-flex justify-content-center">
+                            <h5 class="my-auto">Wtorek</h5>
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Od
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.tueFromH(class="form-control text-center", placeholder="h", value=currentUser.tueFromH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.tueFromM(class="form-control text-center", placeholder="m", value=currentUser.tueFromM)}}
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour2" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute2" placeholder="mm">
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Do
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.tueToH(class="form-control text-center", placeholder="h", value=currentUser.tueToH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.tueToM(class="form-control text-center", placeholder="m", value=currentUser.tueToM)}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
-                        <div class="form-group col-2 d-flex justify-content-center">
-                        <h5 class="my-auto">Wtorek</h5>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Od
+                        <br>
+                        <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-2 d-flex justify-content-center">
+                            <h5 class="my-auto">Środa</h5>
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Od
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.wedFromH(class="form-control text-center", placeholder="h", value=currentUser.wedFromH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.wedFromM(class="form-control text-center", placeholder="m", value=currentUser.wedFromM)}}
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour3" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute3" placeholder="mm">
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Do
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.wedToH(class="form-control text-center", placeholder="h", value=currentUser.wedToH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.wedToM(class="form-control text-center", placeholder="m", value=currentUser.wedToM)}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Do
+                        <br>
+                        <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-2 d-flex justify-content-center">
+                            <h5 class="my-auto">Czwartek</h5>
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Od
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.thuFromH(class="form-control text-center", placeholder="h", value=currentUser.thuFromH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.thuFromM(class="form-control text-center", placeholder="m", value=currentUser.thuFromM)}}
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour4" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute4" placeholder="mm">
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Do
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.thuToH(class="form-control text-center", placeholder="h", value=currentUser.thuToH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.thuToM(class="form-control text-center", placeholder="m", value=currentUser.thuToM)}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
-                        <div class="form-group col-2 d-flex justify-content-center">
-                        <h5 class="my-auto">Środa</h5>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Od
+                        <br>
+                        <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-2 d-flex justify-content-center">
+                            <h5 class="my-auto">Piątek</h5>
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Od
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.friFromH(class="form-control text-center", placeholder="h", value=currentUser.friFromH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.friFromM(class="form-control text-center", placeholder="m", value=currentUser.friFromM)}}
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour5" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute5" placeholder="mm">
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Do
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.friToH(class="form-control text-center", placeholder="h", value=currentUser.friToH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.friToM(class="form-control text-center", placeholder="m", value=currentUser.friToM)}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Do
+                        <br>
+                        <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-2 d-flex justify-content-center">
+                            <h5 class="my-auto">Sobota</h5>
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Od
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.satFromH(class="form-control text-center", placeholder="h", value=currentUser.satFromH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.satFromM(class="form-control text-center", placeholder="m", value=currentUser.satFromM)}}
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour6" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute6" placeholder="mm">
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Do
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.satToH(class="form-control text-center", placeholder="h", value=currentUser.satToH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.satToM(class="form-control text-center", placeholder="m", value=currentUser.satToM)}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
-                        <div class="form-group col-2 d-flex justify-content-center">
-                        <h5 class="my-auto">Czwartek</h5>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Od
+                        <br>
+                        <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-2 d-flex justify-content-center">
+                            <h5 class="my-auto">Niedziela</h5>
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Od
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.sunFromH(class="form-control text-center", placeholder="h", value=currentUser.sunFromH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.sunFromM(class="form-control text-center", placeholder="m", value=currentUser.sunFromM)}}
+                                    </div>
                                 </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour7" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute7" placeholder="mm">
+                            </div>
+                            <div class="form-group col-2">
+                                <div class="row g-0 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-2 text-center d-flex justify-content-center">
+                                        Do
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.sunToH(class="form-control text-center", placeholder="h", value=currentUser.sunToH)}}
+                                    </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center">
+                                        :
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center">
+                                        {{hoursForm.sunToM(class="form-control text-center", placeholder="m", value=currentUser.sunToM)}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Do
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour8" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute8" placeholder="mm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
-                        <div class="form-group col-2 d-flex justify-content-center">
-                        <h5 class="my-auto">Piątek</h5>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Od
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour9" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute9" placeholder="mm">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Do
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour10" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute10" placeholder="mm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
-                        <div class="form-group col-2 d-flex justify-content-center">
-                        <h5 class="my-auto">Sobota</h5>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Od
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour11" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute11" placeholder="mm">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Do
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour12" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute12" placeholder="mm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
-                        <div class="form-group col-2 d-flex justify-content-center">
-                        <h5 class="my-auto">Niedziela</h5>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Od
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour13" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute13" placeholder="mm">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-2">
-                            <div class="row g-0 d-flex justify-content-center align-items-center">
-                                <div class="col-md-2 text-center d-flex justify-content-center">
-                                    Do
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="email" class="form-control text-center" id="inputHour14" placeholder="hh">
-                                </div>
-                                <div class="col-md-1 text-center d-flex justify-content-center">
-                                    :
-                                </div>
-                                <div class="col-md-3 d-flex justify-content-center">
-                                    <input type="text" class="form-control text-center" id="inputMinute14" placeholder="mm">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {{hoursForm.submit(class="btn btn-outline-secondary btn-sm float-end mt-3")}}
                 </form>
             </div>
         </div>

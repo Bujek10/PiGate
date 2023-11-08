@@ -6,7 +6,10 @@ from wtforms.validators import DataRequired, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from datetime import date, datetime
 import os
+
+
 
 # konfiguracja aplikacji
 app = Flask(__name__)
@@ -18,7 +21,7 @@ bcrypt = Bcrypt(app)
 baseDir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(baseDir, 'data/database.db')
 db = SQLAlchemy(app)
-path2='sqlite:///' + os.path.join(baseDir, 'data/databaseUsers.db')
+path2 = 'sqlite:///' + os.path.join(baseDir, 'data/databaseUsers.db')
 app.config['SQLALCHEMY_BINDS'] = {
         'dbUsers': path2
 }
@@ -49,6 +52,41 @@ class UsersData(db.Model, UserMixin):
     lastName = db.Column(db.String(50))
     userPlate = db.Column(db.String(10), unique=True)
     userTag = db.Column(db.String(15), unique=True)
+    monChk = db.Column(db.Boolean)
+    monFromH = db.Column(db.String(2))
+    monFromM = db.Column(db.String(2))
+    monToH = db.Column(db.String(2))
+    monToM = db.Column(db.String(2))
+    tueChk = db.Column(db.Boolean)
+    tueFromH = db.Column(db.String(2))
+    tueFromM = db.Column(db.String(2))
+    tueToH = db.Column(db.String(2))
+    tueToM = db.Column(db.String(2))
+    wedChk = db.Column(db.Boolean)
+    wedFromH = db.Column(db.String(2))
+    wedFromM = db.Column(db.String(2))
+    wedToH = db.Column(db.String(2))
+    wedToM = db.Column(db.String(2))
+    thuChk = db.Column(db.Boolean)
+    thuFromH = db.Column(db.String(2))
+    thuFromM = db.Column(db.String(2))
+    thuToH = db.Column(db.String(2))
+    thuToM = db.Column(db.String(2))
+    friChk = db.Column(db.Boolean)
+    friFromH = db.Column(db.String(2))
+    friFromM = db.Column(db.String(2))
+    friToH = db.Column(db.String(2))
+    friToM = db.Column(db.String(2))
+    satChk = db.Column(db.Boolean)
+    satFromH = db.Column(db.String(2))
+    satFromM = db.Column(db.String(2))
+    satToH = db.Column(db.String(2))
+    satToM = db.Column(db.String(2))
+    sunChk = db.Column(db.Boolean)
+    sunFromH = db.Column(db.String(2))
+    sunFromM = db.Column(db.String(2))
+    sunToH = db.Column(db.String(2))
+    sunToM = db.Column(db.String(2))
 
 
 # konfiguracja Flask-Login
@@ -121,10 +159,108 @@ class RegisterUsersDel(FlaskForm):
     """
     submit = SubmitField('Usuń')
 
-# class hours(FlaskForm):
-#     """Formularz godzin dostępu"""
-#     monFrom = StringField('Od', validators=[Length(min=1, max=2)])
-#     monTo =
+class hours(FlaskForm):
+    """Formularz godzin dostępu"""
+    monFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    monFromM = StringField(validators=[Length(min=0, max=2)])
+    monToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    monToM = StringField(validators=[Length(min=0, max=2)])
+    tueFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    tueFromM = StringField(validators=[Length(min=0, max=2)])
+    tueToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    tueToM = StringField(validators=[Length(min=0, max=2)])
+    wedFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    wedFromM = StringField(validators=[Length(min=0, max=2)])
+    wedToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    wedToM = StringField(validators=[Length(min=0, max=2)])
+    thuFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    thuFromM = StringField(validators=[Length(min=0, max=2)])
+    thuToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    thuToM = StringField(validators=[Length(min=0, max=2)])
+    friFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    friFromM = StringField(validators=[Length(min=0, max=2)])
+    friToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    friToM = StringField(validators=[Length(min=0, max=2)])
+    satFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    satFromM = StringField(validators=[Length(min=0, max=2)])
+    satToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    satToM = StringField(validators=[Length(min=0, max=2)])
+    sunFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    sunFromM = StringField(validators=[Length(min=0, max=2)])
+    sunToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
+    sunToM = StringField(validators=[Length(min=0, max=2)])
+    submit = SubmitField('Zapisz')
+
+
+def canAccess(user_id):
+    checkUser = UsersData.query.filter_by(id=user_id).first()
+    day = datetime.today().weekday()
+    hour = datetime.now().hour
+    minute = datetime.now().minute
+    if day == 0:
+        if (int(checkUser.monFromH) <= hour) and (int(checkUser.monFromM <= minute)) and (int(checkUser.monToH) >= hour) and (int(checkUser.monToM >= minute)) and (checkUser.monChk == True):
+            return True
+    elif day == 1:
+        if (int(checkUser.tueFromH <= hour)) and (int(checkUser.tueFromM <= minute)) and (int(checkUser.tueToH >= hour)) and (int(checkUser.tueToM >= minute)) and (checkUser.tueChk == True):
+            return True
+    elif day == 2:
+        if (int(checkUser.wedFromH <= hour)) and (int(checkUser.wedFromM <= minute)) and (int(checkUser.wedToH >= hour)) and (int(checkUser.wedToM >= minute)) and (checkUser.wedChk == True):
+            return True
+    elif day == 3:
+        if (int(checkUser.thuFromH <= hour)) and (int(checkUser.thuFromM <= minute)) and (int(checkUser.thuToH >= hour)) and (int(checkUser.thuToM >= minute)) and (checkUser.thuChk == True):
+            return True
+    elif day == 4:
+        if (int(checkUser.friFromH <= hour)) and (int(checkUser.friFromM <= minute)) and (int(checkUser.friToH >= hour)) and (int(checkUser.friToM >= minute)) and (checkUser.friChk == True):
+            return True
+    elif day == 5:
+        if (int(checkUser.satFromH <= hour)) and (int(checkUser.satFromM <= minute)) and (int(checkUser.satToH >= hour)) and (int(checkUser.satToM >= minute)) and (checkUser.satChk == True):
+            return True
+    elif day == 6:
+        if (int(checkUser.sunFromH <= hour)) and (int(checkUser.sunFromM <= minute)) and (int(checkUser.sunToH >= hour)) and (int(checkUser.sunToM >= minute)) and (checkUser.sunChk == True):
+            return True
+    else:
+        return False
+
+
+def defaultHours(user_id):
+    currUser = UsersData.query.filter_by(id=user_id).first()
+    print("defaultHoursTest, user id: ", currUser.id)
+    currUser.monChk = True
+    currUser.monFromH = "00"
+    currUser.monFromM = "00"
+    currUser.monToH = "23"
+    currUser.monToM = "59"
+    currUser.tueChk = True
+    currUser.tueFromH = "00"
+    currUser.tueFromM = "00"
+    currUser.tueToH = "23"
+    currUser.tueToM = "59"
+    currUser.wedChk = True
+    currUser.wedFromH = "00"
+    currUser.wedFromM = "00"
+    currUser.wedToH = "23"
+    currUser.wedToM = "59"
+    currUser.thuChk = True
+    currUser.thuFromH = "00"
+    currUser.thuFromM = "00"
+    currUser.thuToH = "23"
+    currUser.thuToM = "59"
+    currUser.friChk = True
+    currUser.friFromH = "00"
+    currUser.friFromM = "00"
+    currUser.friToH = "23"
+    currUser.friToM = "59"
+    currUser.satChk = True
+    currUser.satFromH = "00"
+    currUser.satFromM = "00"
+    currUser.satToH = "23"
+    currUser.satToM = "59"
+    currUser.sunChk = True
+    currUser.sunFromH = "00"
+    currUser.sunFromM = "00"
+    currUser.sunToH = "23"
+    currUser.sunToM = "59"
+    db.session.commit()
 
 
 @app.route('/')
@@ -172,6 +308,8 @@ def registerUsers():
                 )
                 db.session.add(newUserPlate)
                 db.session.commit()
+                temp = UsersData.query.filter_by(userTag=registerFormUsers.userTag.data).first()
+                defaultHours(temp.id)
                 flash('Użytkownik został dodany poprawnie', 'success')
                 return redirect(url_for('usersTable'))
             elif registerFormUsers.userTag.data=="":
@@ -182,6 +320,9 @@ def registerUsers():
                 )
                 db.session.add(newUserPlate)
                 db.session.commit()
+                temp = UsersData.query.filter_by(userPlate=registerFormUsers.userPlate.data.upper()).first()
+                print(temp)
+                defaultHours(temp.id)
                 flash('Użytkownik został dodany poprawnie', 'success')
                 return redirect(url_for('usersTable'))
             else:
@@ -193,6 +334,8 @@ def registerUsers():
                 )
                 db.session.add(newUserPlate)
                 db.session.commit()
+                temp = UsersData.query.filter_by(userTag=registerFormUsers.userTag.data).first()
+                defaultHours(temp.id)
                 flash('Użytkownik został dodany poprawnie', 'success')
                 return redirect(url_for('usersTable'))
 
@@ -370,7 +513,51 @@ def passChange():
 @login_required
 def setTime(user_id):
     currentUser = UsersData.query.filter_by(id=user_id).first()
-    return render_template('setTime.html', title='Godziny dostępu', currentUser=currentUser)
+    hoursForm=hours()
+    hourss=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    if hoursForm.validate_on_submit():
+        try:
+            if int(hoursForm.monFromH.data) not in hourss:
+                hoursForm.monFromH.data = ""
+                flag=1
+            else:
+                currentUser.monFromH = hoursForm.monFromH.data
+            #if hoursForm.monFromM.data == "":
+            #    currentUser.monFromM = "00"
+            #else:
+            currentUser.monFromM = hoursForm.monFromM.data
+            currentUser.monToH = hoursForm.monToH.data
+            currentUser.monToM = hoursForm.monToM.data
+            currentUser.tueFromH = hoursForm.tueFromH.data
+            currentUser.tueFromM = hoursForm.tueFromM.data
+            currentUser.tueToH = hoursForm.tueToH.data
+            currentUser.tueToM = hoursForm.tueToM.data
+            currentUser.wedFromH = hoursForm.wedFromH.data
+            currentUser.wedFromM = hoursForm.wedFromM.data
+            currentUser.wedToH = hoursForm.wedToH.data
+            currentUser.wedToM = hoursForm.wedToM.data
+            currentUser.thuFromH = hoursForm.thuFromH.data
+            currentUser.thuFromM = hoursForm.thuFromM.data
+            currentUser.thuToH = hoursForm.thuToH.data
+            currentUser.thuToM = hoursForm.thuToM.data
+            currentUser.friFromH = hoursForm.friFromH.data
+            currentUser.friFromM = hoursForm.friFromM.data
+            currentUser.friToH = hoursForm.friToH.data
+            currentUser.friToM = hoursForm.friToM.data
+            currentUser.satFromH = hoursForm.satFromH.data
+            currentUser.satFromM = hoursForm.satFromM.data
+            currentUser.satToH = hoursForm.satToH.data
+            currentUser.satToM = hoursForm.satToM.data
+            currentUser.sunFromH = hoursForm.sunFromH.data
+            currentUser.sunFromM = hoursForm.sunFromM.data
+            currentUser.sunToH = hoursForm.sunToH.data
+            currentUser.sunToM = hoursForm.sunToM.data
+            db.session.commit()
+            flash(f'Godziny dostępu użytkownika "{currentUser.firstName} {currentUser.lastName}" zostały ustawione poprawnie.', 'success')
+            #return redirect(url_for('usersTable'))
+        except Exception:
+            flash('Błąd przy zapisywaniu godzin dostępu.', 'danger')
+    return render_template('setTime.html', title='Godziny dostępu', currentUser=currentUser, hoursForm=hoursForm)
 
 
 
