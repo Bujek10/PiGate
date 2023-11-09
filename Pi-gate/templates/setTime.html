@@ -36,7 +36,15 @@
             <div class="mt-5">
                 <form action="" method="post">
                     {{hoursForm.hidden_tag()}}
+
                         <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-1 align-items-center d-flex justify-content-end">
+                                {% if currentUser.monChk%}
+                                    {{hoursForm.monChk(class="form-check-input", checked=True)}}
+                                {% else %}
+                                    {{hoursForm.monChk(class="form-check-input", checked=False)}}
+                                {% endif %}
+                            </div>
                             <div class="form-group col-2 align-items-center d-flex justify-content-center">
                             <h5 class="my-auto">Poniedziałek</h5>
                             </div>
@@ -72,9 +80,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-1">
+                            </div>
                         </div>
+
                         <br>
+
                         <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-1 align-items-center d-flex justify-content-end">
+                                {% if currentUser.tueChk%}
+                                    {{hoursForm.tueChk(class="form-check-input text-danger", checked=True)}}
+                                {% else %}
+                                    {{hoursForm.tueChk(class="form-check-input", checked=False)}}
+                                {% endif %}
+                            </div>
                             <div class="form-group col-2 d-flex justify-content-center">
                             <h5 class="my-auto">Wtorek</h5>
                             </div>
@@ -84,7 +103,11 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.tueFromH(class="form-control text-center", placeholder="h", value=currentUser.tueFromH)}}
+                                        {% if hoursForm.tueChk(checked=True) %}
+                                            {{hoursForm.tueFromH(class="form-control text-center", placeholder="h", value=currentUser.tueFromH)}}
+                                        {% else %}
+                                            {{hoursForm.tueFromH(class="form-control text-center", placeholder="h", value=currentUser.tueFromH, disabled=True)}}
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
@@ -110,9 +133,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-1">
+                            </div>
                         </div>
+
                         <br>
+
                         <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-1 align-items-center d-flex justify-content-end">
+                                {% if currentUser.wedChk%}
+                                    {{hoursForm.wedChk(class="form-check-input", checked=True)}}
+                                {% else %}
+                                    {{hoursForm.wedChk(class="form-check-input", checked=False)}}
+                                {% endif %}
+                            </div>
                             <div class="form-group col-2 d-flex justify-content-center">
                             <h5 class="my-auto">Środa</h5>
                             </div>
@@ -148,9 +182,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-1">
+                            </div>
                         </div>
+
                         <br>
+
                         <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-1 align-items-center d-flex justify-content-end">
+                                {% if currentUser.thuChk%}
+                                    {{hoursForm.thuChk(class="form-check-input", checked=True)}}
+                                {% else %}
+                                    {{hoursForm.thuChk(class="form-check-input", checked=False)}}
+                                {% endif %}
+                            </div>
                             <div class="form-group col-2 d-flex justify-content-center">
                             <h5 class="my-auto">Czwartek</h5>
                             </div>
@@ -186,9 +231,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-1">
+                            </div>
                         </div>
+
                         <br>
+
                         <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-1 align-items-center d-flex justify-content-end">
+                                {% if currentUser.friChk%}
+                                    {{hoursForm.friChk(class="form-check-input", checked=True)}}
+                                {% else %}
+                                    {{hoursForm.friChk(class="form-check-input", checked=False)}}
+                                {% endif %}
+                            </div>
                             <div class="form-group col-2 d-flex justify-content-center">
                             <h5 class="my-auto">Piątek</h5>
                             </div>
@@ -224,9 +280,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-1">
+                            </div>
                         </div>
+
                         <br>
+
                         <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-1 align-items-center d-flex justify-content-end">
+                                {% if currentUser.satChk%}
+                                    {{hoursForm.satChk(class="form-check-input", checked=True)}}
+                                {% else %}
+                                    {{hoursForm.satChk(class="form-check-input", checked=False)}}
+                                {% endif %}
+                            </div>
                             <div class="form-group col-2 d-flex justify-content-center">
                             <h5 class="my-auto">Sobota</h5>
                             </div>
@@ -262,9 +329,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-1">
+                            </div>
                         </div>
+
                         <br>
+
                         <div class="row g-0 align-items-center d-flex justify-content-center">
+                            <div class="form-group col-1 align-items-center d-flex justify-content-end">
+                                {% if currentUser.sunChk%}
+                                    {{hoursForm.sunChk(class="form-check-input", checked=True)}}
+                                {% else %}
+                                    {{hoursForm.sunChk(class="form-check-input", checked=False)}}
+                                {% endif %}
+                            </div>
                             <div class="form-group col-2 d-flex justify-content-center">
                             <h5 class="my-auto">Niedziela</h5>
                             </div>
@@ -300,8 +378,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group col-1">
+                            </div>
                         </div>
-                    {{hoursForm.submit(class="btn btn-outline-secondary btn-sm float-end mt-3")}}
+                        <br>
+                    <div class="row g-0 align-items-center d-flex justify-content-center">
+                        {{hoursForm.submit(class="btn btn-outline-primary btn-sm float-end col-3")}}
+                    </div>
                 </form>
             </div>
         </div>

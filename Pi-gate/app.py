@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_bs4 import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Length, InputRequired
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
@@ -189,6 +189,13 @@ class hours(FlaskForm):
     sunFromM = StringField(validators=[Length(min=0, max=2)])
     sunToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
     sunToM = StringField(validators=[Length(min=0, max=2)])
+    monChk = BooleanField()
+    tueChk = BooleanField()
+    wedChk = BooleanField()
+    thuChk = BooleanField()
+    friChk = BooleanField()
+    satChk = BooleanField()
+    sunChk = BooleanField()
     submit = SubmitField('Zapisz')
 
 
@@ -517,42 +524,59 @@ def setTime(user_id):
     hourss=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
     if hoursForm.validate_on_submit():
         try:
-            if int(hoursForm.monFromH.data) not in hourss:
-                hoursForm.monFromH.data = ""
-                flag=1
-            else:
+            if hoursForm.monChk.data == True:
                 currentUser.monFromH = hoursForm.monFromH.data
-            #if hoursForm.monFromM.data == "":
-            #    currentUser.monFromM = "00"
-            #else:
-            currentUser.monFromM = hoursForm.monFromM.data
-            currentUser.monToH = hoursForm.monToH.data
-            currentUser.monToM = hoursForm.monToM.data
-            currentUser.tueFromH = hoursForm.tueFromH.data
-            currentUser.tueFromM = hoursForm.tueFromM.data
-            currentUser.tueToH = hoursForm.tueToH.data
-            currentUser.tueToM = hoursForm.tueToM.data
-            currentUser.wedFromH = hoursForm.wedFromH.data
-            currentUser.wedFromM = hoursForm.wedFromM.data
-            currentUser.wedToH = hoursForm.wedToH.data
-            currentUser.wedToM = hoursForm.wedToM.data
-            currentUser.thuFromH = hoursForm.thuFromH.data
-            currentUser.thuFromM = hoursForm.thuFromM.data
-            currentUser.thuToH = hoursForm.thuToH.data
-            currentUser.thuToM = hoursForm.thuToM.data
-            currentUser.friFromH = hoursForm.friFromH.data
-            currentUser.friFromM = hoursForm.friFromM.data
-            currentUser.friToH = hoursForm.friToH.data
-            currentUser.friToM = hoursForm.friToM.data
-            currentUser.satFromH = hoursForm.satFromH.data
-            currentUser.satFromM = hoursForm.satFromM.data
-            currentUser.satToH = hoursForm.satToH.data
-            currentUser.satToM = hoursForm.satToM.data
-            currentUser.sunFromH = hoursForm.sunFromH.data
-            currentUser.sunFromM = hoursForm.sunFromM.data
-            currentUser.sunToH = hoursForm.sunToH.data
-            currentUser.sunToM = hoursForm.sunToM.data
+                currentUser.monFromM = hoursForm.monFromM.data
+                currentUser.monToH = hoursForm.monToH.data
+                currentUser.monToM = hoursForm.monToM.data
+
+            if hoursForm.tueChk.data == True:
+                currentUser.tueFromH = hoursForm.tueFromH.data
+                currentUser.tueFromM = hoursForm.tueFromM.data
+                currentUser.tueToH = hoursForm.tueToH.data
+                currentUser.tueToM = hoursForm.tueToM.data
+
+            if hoursForm.wedChk.data == True:
+                currentUser.wedFromH = hoursForm.wedFromH.data
+                currentUser.wedFromM = hoursForm.wedFromM.data
+                currentUser.wedToH = hoursForm.wedToH.data
+                currentUser.wedToM = hoursForm.wedToM.data
+
+            if hoursForm.thuChk.data == True:
+                currentUser.thuFromH = hoursForm.thuFromH.data
+                currentUser.thuFromM = hoursForm.thuFromM.data
+                currentUser.thuToH = hoursForm.thuToH.data
+                currentUser.thuToM = hoursForm.thuToM.data
+
+            if hoursForm.friChk.data == True:
+                currentUser.friFromH = hoursForm.friFromH.data
+                currentUser.friFromM = hoursForm.friFromM.data
+                currentUser.friToH = hoursForm.friToH.data
+                currentUser.friToM = hoursForm.friToM.data
+
+            if hoursForm.satChk.data == True:
+                currentUser.satFromH = hoursForm.satFromH.data
+                currentUser.satFromM = hoursForm.satFromM.data
+                currentUser.satToH = hoursForm.satToH.data
+                currentUser.satToM = hoursForm.satToM.data
+
+            if hoursForm.sunChk.data == True:
+                currentUser.sunFromH = hoursForm.sunFromH.data
+                currentUser.sunFromM = hoursForm.sunFromM.data
+                currentUser.sunToH = hoursForm.sunToH.data
+                currentUser.sunToM = hoursForm.sunToM.data
+
+            currentUser.monChk = hoursForm.monChk.data
+            currentUser.tueChk = hoursForm.tueChk.data
+            currentUser.wedChk = hoursForm.wedChk.data
+            currentUser.thuChk = hoursForm.thuChk.data
+            currentUser.friChk = hoursForm.friChk.data
+            currentUser.satChk = hoursForm.satChk.data
+            currentUser.sunChk = hoursForm.sunChk.data
+            print(hoursForm.monChk.data)
+
             db.session.commit()
+
             flash(f'Godziny dostępu użytkownika "{currentUser.firstName} {currentUser.lastName}" zostały ustawione poprawnie.', 'success')
             #return redirect(url_for('usersTable'))
         except Exception:
