@@ -1,12 +1,12 @@
-from flask import Flask, render_template, session, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bs4 import Bootstrap
 from flask_wtf import FlaskForm, Form
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
-from wtforms.validators import DataRequired, Length, InputRequired, ValidationError, StopValidation, InputNumber, NumberRange
+from wtforms.validators import DataRequired, Length, StopValidation, InputNumber
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from datetime import date, datetime
+from datetime import datetime
 import os
 
 
@@ -589,7 +589,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         db.create_all(bind='dbUsers')
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=7171, debug=True)
 
 
 
