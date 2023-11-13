@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bs4 import Bootstrap
-from flask_wtf import FlaskForm, Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length, StopValidation, NumberRange
 from flask_sqlalchemy import SQLAlchemy
@@ -10,21 +10,28 @@ from datetime import datetime
 import os
 
 
+# konfiguracja bazy danych użytkowników i tablic
+baseDir = os.path.abspath(os.path.dirname(__file__))
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(baseDir, 'data/database.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(baseDir, 'data/database.db')
+path2 = 'sqlite:///' + os.path.join(baseDir, 'data/databaseUsers.db')
+# app.config['SQLALCHEMY_BINDS'] = {
+#         'dbUsers': path2
+# }
+SQLALCHEMY_BINDS = {
+    'dbUsers': path2
+}
 
 # konfiguracja aplikacji
 app = Flask(__name__)
+app.config.from_object(__name__)
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'fghjklpoiuy%^&*())(*UYTGHI*&'
 bcrypt = Bcrypt(app)
 
-# konfiguracja bazy danych użytkowników i tablic
-baseDir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(baseDir, 'data/database.db')
+
 db = SQLAlchemy(app)
-path2 = 'sqlite:///' + os.path.join(baseDir, 'data/databaseUsers.db')
-app.config['SQLALCHEMY_BINDS'] = {
-        'dbUsers': path2
-}
+
 
 # tabela bazy danych użytkowników
 class Users(db.Model, UserMixin):
@@ -575,6 +582,7 @@ def setTime(user_id):
             currentUser.sunChk = hoursForm.sunChk.data
 
             db.session.commit()
+            return redirect(url_for('usersTable'))
         except Exception:
             flash('Błąd przy zapisywaniu godzin dostępu.', 'danger')
             pass
@@ -588,7 +596,6 @@ def cameraView():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        db.create_all(bind='dbUsers')
     app.run(host='0.0.0.0', port=7171, debug=True)
 
 
