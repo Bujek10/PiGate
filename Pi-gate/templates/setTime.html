@@ -2,6 +2,7 @@
 {% block scripts %}
     {{ super() }}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/setTime.css">
 {% endblock %}
 {% block title %} Smart Gate Management Project - {{ title }}{% endblock %}
 {% block navbar %}
@@ -54,13 +55,15 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.monFromH(class="form-control text-center", placeholder="h", value=currentUser.monFromH)}}
+                                        {{hoursForm.monFromH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.monFromH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.monFromM(class="form-control text-center", placeholder="m", value=currentUser.monFromM)}}
+                                        <div class="w-100">
+                                            {{hoursForm.monFromM(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.monFromM)}}
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -70,13 +73,13 @@
                                         Do
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.monToH(class="form-control text-center", placeholder="h", value=currentUser.monToH)}}
+                                        {{hoursForm.monToH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.monToH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.monToM(class="form-control text-center", placeholder="m", value=currentUser.monToM)}}
+                                        {{hoursForm.monToM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.monToM)}}
                                     </div>
                                 </div>
                             </div>
@@ -88,11 +91,7 @@
 
                         <div class="row g-0 align-items-center d-flex justify-content-center">
                             <div class="form-group col-1 align-items-center d-flex justify-content-end">
-                                {% if currentUser.tueChk%}
-                                    {{hoursForm.tueChk(class="form-check-input text-danger", checked=True)}}
-                                {% else %}
-                                    {{hoursForm.tueChk(class="form-check-input", checked=False)}}
-                                {% endif %}
+                                {{hoursForm.tueChk(class="form-check-input", checked=False)}}
                             </div>
                             <div class="form-group col-2 d-flex justify-content-center">
                             <h5 class="my-auto">Wtorek</h5>
@@ -103,17 +102,13 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {% if hoursForm.tueChk(checked=True) %}
-                                            {{hoursForm.tueFromH(class="form-control text-center", placeholder="h", value=currentUser.tueFromH)}}
-                                        {% else %}
-                                            {{hoursForm.tueFromH(class="form-control text-center", placeholder="h", value=currentUser.tueFromH, disabled=True)}}
-                                        {% endif %}
+                                        {{hoursForm.tueFromH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.tueFromH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.tueFromM(class="form-control text-center", placeholder="m", value=currentUser.tueFromM)}}
+                                        {{hoursForm.tueFromM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.tueFromM)}}
                                     </div>
                                 </div>
                             </div>
@@ -123,13 +118,13 @@
                                         Do
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.tueToH(class="form-control text-center", placeholder="h", value=currentUser.tueToH)}}
+                                        {{hoursForm.tueToH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.tueToH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.tueToM(class="form-control text-center", placeholder="m", value=currentUser.tueToM)}}
+                                        {{hoursForm.tueToM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.tueToM)}}
                                     </div>
                                 </div>
                             </div>
@@ -156,13 +151,13 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.wedFromH(class="form-control text-center", placeholder="h", value=currentUser.wedFromH)}}
+                                        {{hoursForm.wedFromH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.wedFromH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.wedFromM(class="form-control text-center", placeholder="m", value=currentUser.wedFromM)}}
+                                        {{hoursForm.wedFromM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.wedFromM)}}
                                     </div>
                                 </div>
                             </div>
@@ -172,13 +167,13 @@
                                         Do
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.wedToH(class="form-control text-center", placeholder="h", value=currentUser.wedToH)}}
+                                        {{hoursForm.wedToH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.wedToH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.wedToM(class="form-control text-center", placeholder="m", value=currentUser.wedToM)}}
+                                        {{hoursForm.wedToM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.wedToM)}}
                                     </div>
                                 </div>
                             </div>
@@ -205,13 +200,13 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.thuFromH(class="form-control text-center", placeholder="h", value=currentUser.thuFromH)}}
+                                        {{hoursForm.thuFromH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.thuFromH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.thuFromM(class="form-control text-center", placeholder="m", value=currentUser.thuFromM)}}
+                                        {{hoursForm.thuFromM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.thuFromM)}}
                                     </div>
                                 </div>
                             </div>
@@ -221,13 +216,13 @@
                                         Do
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.thuToH(class="form-control text-center", placeholder="h", value=currentUser.thuToH)}}
+                                        {{hoursForm.thuToH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.thuToH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.thuToM(class="form-control text-center", placeholder="m", value=currentUser.thuToM)}}
+                                        {{hoursForm.thuToM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.thuToM)}}
                                     </div>
                                 </div>
                             </div>
@@ -254,13 +249,13 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.friFromH(class="form-control text-center", placeholder="h", value=currentUser.friFromH)}}
+                                        {{hoursForm.friFromH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.friFromH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.friFromM(class="form-control text-center", placeholder="m", value=currentUser.friFromM)}}
+                                        {{hoursForm.friFromM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.friFromM)}}
                                     </div>
                                 </div>
                             </div>
@@ -270,13 +265,13 @@
                                         Do
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.friToH(class="form-control text-center", placeholder="h", value=currentUser.friToH)}}
+                                        {{hoursForm.friToH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.friToH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.friToM(class="form-control text-center", placeholder="m", value=currentUser.friToM)}}
+                                        {{hoursForm.friToM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.friToM)}}
                                     </div>
                                 </div>
                             </div>
@@ -303,13 +298,13 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.satFromH(class="form-control text-center", placeholder="h", value=currentUser.satFromH)}}
+                                        {{hoursForm.satFromH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.satFromH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.satFromM(class="form-control text-center", placeholder="m", value=currentUser.satFromM)}}
+                                        {{hoursForm.satFromM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.satFromM)}}
                                     </div>
                                 </div>
                             </div>
@@ -319,13 +314,13 @@
                                         Do
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.satToH(class="form-control text-center", placeholder="h", value=currentUser.satToH)}}
+                                        {{hoursForm.satToH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.satToH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.satToM(class="form-control text-center", placeholder="m", value=currentUser.satToM)}}
+                                        {{hoursForm.satToM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.satToM)}}
                                     </div>
                                 </div>
                             </div>
@@ -352,13 +347,13 @@
                                         Od
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.sunFromH(class="form-control text-center", placeholder="h", value=currentUser.sunFromH)}}
+                                        {{hoursForm.sunFromH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.sunFromH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.sunFromM(class="form-control text-center", placeholder="m", value=currentUser.sunFromM)}}
+                                        {{hoursForm.sunFromM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.sunFromM)}}
                                     </div>
                                 </div>
                             </div>
@@ -368,13 +363,13 @@
                                         Do
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.sunToH(class="form-control text-center", placeholder="h", value=currentUser.sunToH)}}
+                                        {{hoursForm.sunToH(class="form-control text-center border border-secondary", placeholder="h", value=currentUser.sunToH)}}
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center">
                                         :
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-center">
-                                        {{hoursForm.sunToM(class="form-control text-center", placeholder="m", value=currentUser.sunToM)}}
+                                        {{hoursForm.sunToM(class="form-control text-center border border-secondary", placeholder="m", value=currentUser.sunToM)}}
                                     </div>
                                 </div>
                             </div>
@@ -382,7 +377,7 @@
                             </div>
                         </div>
                         <br>
-                    <div class="row g-0 align-items-center d-flex justify-content-center">
+                    <div class="row g-0 align-items-center d-flex justify-content-center mt-1 mb-5">
                         {{hoursForm.submit(class="btn btn-outline-primary btn-sm float-end col-3")}}
                     </div>
                 </form>

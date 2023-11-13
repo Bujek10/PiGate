@@ -77,11 +77,11 @@
                                         <form action="" method="post">
                                             {{ registerFormAdminEdit.hidden_tag() }}
                                             <input type="hidden" name="ID" value="{{admin.id}}">
-                                            {{ registerFormAdminEdit.userLogin.label(class="form-label") }}
+                                            {{ registerFormAdminEdit.userLogin.label(class="form-label mt-2 my-1") }}
                                             {{ registerFormAdminEdit.userLogin(class="form-control", placeholder="First Name", value=admin.userLogin) }}
-                                            {{ registerFormAdminEdit.firstName.label(class="form-label") }}
+                                            {{ registerFormAdminEdit.firstName.label(class="form-label mt-2 my-1") }}
                                             {{ registerFormAdminEdit.firstName(class="form-control", placeholder="Last Name", value=admin.firstName) }}
-                                            {{ registerFormAdminEdit.lastName.label(class="form-label") }}
+                                            {{ registerFormAdminEdit.lastName.label(class="form-label mt-2 my-1") }}
                                             {{ registerFormAdminEdit.lastName(class="form-control", placeholder="Plate number", value=admin.lastName) }}
 
                                     </div>

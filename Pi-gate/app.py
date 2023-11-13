@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, redirect, url_for, flash, request
 from flask_bs4 import Bootstrap
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, InputRequired
+from flask_wtf import FlaskForm, Form
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
+from wtforms.validators import DataRequired, Length, InputRequired, ValidationError, StopValidation, InputNumber, NumberRange
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
@@ -159,36 +159,44 @@ class RegisterUsersDel(FlaskForm):
     """
     submit = SubmitField('Usuń')
 
+def hourCheck(form, field):
+    if not((int(field.data) >= 0) and (int(field.data) <= 23)):
+        raise StopValidation("Podaj godzine od 0 do 23")
+
+def minuteCheck(form, field):
+    if not ((int(field.data) >= 0) and (int(field.data) <= 59)):
+        raise StopValidation("Podaj minuty od 0 do 59")
+
 class hours(FlaskForm):
     """Formularz godzin dostępu"""
-    monFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    monFromM = StringField(validators=[Length(min=0, max=2)])
-    monToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    monToM = StringField(validators=[Length(min=0, max=2)])
-    tueFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    tueFromM = StringField(validators=[Length(min=0, max=2)])
-    tueToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    tueToM = StringField(validators=[Length(min=0, max=2)])
-    wedFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    wedFromM = StringField(validators=[Length(min=0, max=2)])
-    wedToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    wedToM = StringField(validators=[Length(min=0, max=2)])
-    thuFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    thuFromM = StringField(validators=[Length(min=0, max=2)])
-    thuToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    thuToM = StringField(validators=[Length(min=0, max=2)])
-    friFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    friFromM = StringField(validators=[Length(min=0, max=2)])
-    friToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    friToM = StringField(validators=[Length(min=0, max=2)])
-    satFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    satFromM = StringField(validators=[Length(min=0, max=2)])
-    satToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    satToM = StringField(validators=[Length(min=0, max=2)])
-    sunFromH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    sunFromM = StringField(validators=[Length(min=0, max=2)])
-    sunToH = StringField(validators=[DataRequired(), Length(min=0, max=2)])
-    sunToM = StringField(validators=[Length(min=0, max=2)])
+    monFromH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    monFromM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    monToH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    monToM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    tueFromH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    tueFromM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    tueToH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    tueToM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    wedFromH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    wedFromM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    wedToH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    wedToM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    thuFromH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    thuFromM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    thuToH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    thuToM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    friFromH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    friFromM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    friToH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    friToM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    satFromH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    satFromM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    satToH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    satToM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    sunFromH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    sunFromM = IntegerField(validators=[InputNumber(min=0, max=59)])
+    sunToH = IntegerField(validators=[InputNumber(min=0, max=23)])
+    sunToM = IntegerField(validators=[InputNumber(min=0, max=59)])
     monChk = BooleanField()
     tueChk = BooleanField()
     wedChk = BooleanField()
@@ -231,7 +239,6 @@ def canAccess(user_id):
 
 def defaultHours(user_id):
     currUser = UsersData.query.filter_by(id=user_id).first()
-    print("defaultHoursTest, user id: ", currUser.id)
     currUser.monChk = True
     currUser.monFromH = "00"
     currUser.monFromM = "00"
@@ -521,51 +528,44 @@ def passChange():
 def setTime(user_id):
     currentUser = UsersData.query.filter_by(id=user_id).first()
     hoursForm=hours()
-    hourss=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
     if hoursForm.validate_on_submit():
         try:
-            if hoursForm.monChk.data == True:
-                currentUser.monFromH = hoursForm.monFromH.data
-                currentUser.monFromM = hoursForm.monFromM.data
-                currentUser.monToH = hoursForm.monToH.data
-                currentUser.monToM = hoursForm.monToM.data
-
-            if hoursForm.tueChk.data == True:
-                currentUser.tueFromH = hoursForm.tueFromH.data
-                currentUser.tueFromM = hoursForm.tueFromM.data
-                currentUser.tueToH = hoursForm.tueToH.data
-                currentUser.tueToM = hoursForm.tueToM.data
-
-            if hoursForm.wedChk.data == True:
-                currentUser.wedFromH = hoursForm.wedFromH.data
-                currentUser.wedFromM = hoursForm.wedFromM.data
-                currentUser.wedToH = hoursForm.wedToH.data
-                currentUser.wedToM = hoursForm.wedToM.data
-
-            if hoursForm.thuChk.data == True:
-                currentUser.thuFromH = hoursForm.thuFromH.data
-                currentUser.thuFromM = hoursForm.thuFromM.data
-                currentUser.thuToH = hoursForm.thuToH.data
-                currentUser.thuToM = hoursForm.thuToM.data
-
-            if hoursForm.friChk.data == True:
-                currentUser.friFromH = hoursForm.friFromH.data
-                currentUser.friFromM = hoursForm.friFromM.data
-                currentUser.friToH = hoursForm.friToH.data
-                currentUser.friToM = hoursForm.friToM.data
-
-            if hoursForm.satChk.data == True:
-                currentUser.satFromH = hoursForm.satFromH.data
-                currentUser.satFromM = hoursForm.satFromM.data
-                currentUser.satToH = hoursForm.satToH.data
-                currentUser.satToM = hoursForm.satToM.data
-
-            if hoursForm.sunChk.data == True:
-                currentUser.sunFromH = hoursForm.sunFromH.data
-                currentUser.sunFromM = hoursForm.sunFromM.data
-                currentUser.sunToH = hoursForm.sunToH.data
-                currentUser.sunToM = hoursForm.sunToM.data
-
+            #poniedziałek
+            currentUser.monFromH = hoursForm.monFromH.data
+            currentUser.monFromM = hoursForm.monFromM.data
+            currentUser.monToH = hoursForm.monToH.data
+            currentUser.monToM = hoursForm.monToM.data
+            #wtorek
+            currentUser.tueFromH = hoursForm.tueFromH.data
+            currentUser.tueFromM = hoursForm.tueFromM.data
+            currentUser.tueToH = hoursForm.tueToH.data
+            currentUser.tueToM = hoursForm.tueToM.data
+            #środa
+            currentUser.wedFromH = hoursForm.wedFromH.data
+            currentUser.wedFromM = hoursForm.wedFromM.data
+            currentUser.wedToH = hoursForm.wedToH.data
+            currentUser.wedToM = hoursForm.wedToM.data
+            #czwartek
+            currentUser.thuFromH = hoursForm.thuFromH.data
+            currentUser.thuFromM = hoursForm.thuFromM.data
+            currentUser.thuToH = hoursForm.thuToH.data
+            currentUser.thuToM = hoursForm.thuToM.data
+            #piątek
+            currentUser.friFromH = hoursForm.friFromH.data
+            currentUser.friFromM = hoursForm.friFromM.data
+            currentUser.friToH = hoursForm.friToH.data
+            currentUser.friToM = hoursForm.friToM.data
+            #sobota
+            currentUser.satFromH = hoursForm.satFromH.data
+            currentUser.satFromM = hoursForm.satFromM.data
+            currentUser.satToH = hoursForm.satToH.data
+            currentUser.satToM = hoursForm.satToM.data
+            #niedziela
+            currentUser.sunFromH = hoursForm.sunFromH.data
+            currentUser.sunFromM = hoursForm.sunFromM.data
+            currentUser.sunToH = hoursForm.sunToH.data
+            currentUser.sunToM = hoursForm.sunToM.data
+            #przyciski
             currentUser.monChk = hoursForm.monChk.data
             currentUser.tueChk = hoursForm.tueChk.data
             currentUser.wedChk = hoursForm.wedChk.data
@@ -573,17 +573,17 @@ def setTime(user_id):
             currentUser.friChk = hoursForm.friChk.data
             currentUser.satChk = hoursForm.satChk.data
             currentUser.sunChk = hoursForm.sunChk.data
-            print(hoursForm.monChk.data)
 
             db.session.commit()
-
-            flash(f'Godziny dostępu użytkownika "{currentUser.firstName} {currentUser.lastName}" zostały ustawione poprawnie.', 'success')
-            #return redirect(url_for('usersTable'))
         except Exception:
             flash('Błąd przy zapisywaniu godzin dostępu.', 'danger')
+            pass
     return render_template('setTime.html', title='Godziny dostępu', currentUser=currentUser, hoursForm=hoursForm)
 
-
+@app.route('/cameraView')
+@login_required
+def cameraView():
+    return render_template('cameraView.html', title='Widok kamery')
 
 if __name__ == '__main__':
     with app.app_context():

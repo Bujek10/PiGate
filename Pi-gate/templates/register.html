@@ -34,13 +34,13 @@
             <div class="col-lg-4 offset-lg-4 my-3">
                 <form action="" method="post">
                     {{ registerForm.hidden_tag() }}
-                    {{ registerForm.userLogin.label(class="form-label") }}
+                    {{ registerForm.userLogin.label(class="form-label mt-2 my-1") }}
                     {{ registerForm.userLogin(class="form-control", placeholder="Login") }}
-                    {{ registerForm.userPass.label(class="form-label") }}
+                    {{ registerForm.userPass.label(class="form-label mt-2 my-1") }}
                     {{ registerForm.userPass(class="form-control", placeholder="Password") }}
-                    {{ registerForm.firstName.label(class="form-label") }}
+                    {{ registerForm.firstName.label(class="form-label mt-2 my-1") }}
                     {{ registerForm.firstName(class="form-control", placeholder="First name") }}
-                    {{ registerForm.lastName.label(class="form-label") }}
+                    {{ registerForm.lastName.label(class="form-label mt-2 my-1") }}
                     {{ registerForm.lastName(class="form-control", placeholder="Last name") }}
                     {{ registerForm.submit(class="btn btn-outline-secondary btn-sm float-end mt-3") }}
                 </form>

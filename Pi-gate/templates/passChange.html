@@ -34,11 +34,11 @@
             <div class="col-lg-4 offset-lg-4 my-3">
                 <form action="" method="post">
                     {{ passChangeForm.hidden_tag() }}
-                    {{ passChangeForm.userPass.label(class="form-label") }}
+                    {{ passChangeForm.userPass.label(class="form-label mt-2 my-1") }}
                     {{ passChangeForm.userPass(class="form-control", placeholder="Old password") }}
-                    {{ passChangeForm.newPass.label(class="form-label") }}
+                    {{ passChangeForm.newPass.label(class="form-label mt-2 my-1") }}
                     {{ passChangeForm.newPass(class="form-control", placeholder="New password") }}
-                    {{ passChangeForm.repeatPass.label(class="form-label") }}
+                    {{ passChangeForm.repeatPass.label(class="form-label mt-2 my-1") }}
                     {{ passChangeForm.repeatPass(class="form-control", placeholder="Repeat password") }}
                     {{ passChangeForm.submit(class="btn btn-outline-secondary btn-sm float-end mt-3") }}
                 </form>

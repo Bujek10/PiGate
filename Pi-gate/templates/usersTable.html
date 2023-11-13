@@ -84,12 +84,12 @@
                                         <form action="" method="post">
                                             {{ registerFormUsersEdit.hidden_tag() }}
                                             <input type="hidden" name="ID" value="{{content.id}}">
-                                            {{ registerFormUsersEdit.firstName.label(class="form-label") }}
+                                            {{ registerFormUsersEdit.firstName.label(class="form-label mt-2 my-1") }}
                                             {{ registerFormUsersEdit.firstName(class="form-control", placeholder="First Name", value=content.firstName) }}
-                                            {{ registerFormUsersEdit.lastName.label(class="form-label") }}
+                                            {{ registerFormUsersEdit.lastName.label(class="form-label mt-2 my-1") }}
                                             {{ registerFormUsersEdit.lastName(class="form-control", placeholder="Last Name", value=content.lastName) }}
 
-                                            {{ registerFormUsersEdit.userPlate.label(class="form-label") }}
+                                            {{ registerFormUsersEdit.userPlate.label(class="form-label mt-2 my-1") }}
                                             {% if content.userPlate%}
                                             {{ registerFormUsersEdit.userPlate(class="form-control", placeholder="Plate number", value=content.userPlate) }}
                                             {% else %}
@@ -97,7 +97,7 @@
                                             {% endif %}
 
 
-                                            {{ registerFormUsersEdit.userTag.label(class="form-label") }}
+                                            {{ registerFormUsersEdit.userTag.label(class="form-label mt-2 my-1") }}
                                             {% if content.userTag%}
                                             {{ registerFormUsersEdit.userTag(class="form-control", placeholder="RFID/NFC tag", value=content.userTag) }}
                                             {% else %}
