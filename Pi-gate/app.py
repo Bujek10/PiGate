@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, Response
 from flask_bs4 import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
@@ -8,16 +8,16 @@ from flask_bcrypt import Bcrypt
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from datetime import datetime
 import os
+import cv2
 
 
 # konfiguracja bazy danych użytkowników i tablic
+
 baseDir = os.path.abspath(os.path.dirname(__file__))
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(baseDir, 'data/database.db')
+# dataFolder = os.path.join(baseDir, 'data')
+# os.mkdir(dataFolder)
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(baseDir, 'data/database.db')
 path2 = 'sqlite:///' + os.path.join(baseDir, 'data/databaseUsers.db')
-# app.config['SQLALCHEMY_BINDS'] = {
-#         'dbUsers': path2
-# }
 SQLALCHEMY_BINDS = {
     'dbUsers': path2
 }
@@ -28,10 +28,7 @@ app.config.from_object(__name__)
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'fghjklpoiuy%^&*())(*UYTGHI*&'
 bcrypt = Bcrypt(app)
-
-
 db = SQLAlchemy(app)
-
 
 # tabela bazy danych użytkowników
 class Users(db.Model, UserMixin):
@@ -400,20 +397,19 @@ def usersTable():
     if registerFormUsersEdit.validate_on_submit():
         try:
             targetId = request.form.get('ID')
-            userEdit=UsersData.query.get(targetId)
-
+            userEdit=UsersData.query.filter_by(id=targetId).first()
             userEdit.firstName = registerFormUsersEdit.firstName.data.capitalize()
             userEdit.lastName = registerFormUsersEdit.lastName.data.capitalize()
 
             if (registerFormUsersEdit.userTag.data.capitalize() == "Brak" or registerFormUsersEdit.userTag.data == "") and (registerFormUsersEdit.userPlate.data.capitalize() == "Brak" or registerFormUsersEdit.userPlate.data == ""):
                 flash ('Podaj conajmniej jeden sposób autoryzacji', 'danger')
-            elif registerFormUsersEdit.userTag.data.capitalize=="Brak" or registerFormUsersEdit.userTag.data=="":
+            elif registerFormUsersEdit.userTag.data.capitalize() == "Brak" or registerFormUsersEdit.userTag.data == "":
                 userEdit.userTag = None
                 userEdit.userPlate = registerFormUsersEdit.userPlate.data.upper()
                 db.session.commit()
                 flash('Wpis został edytowany', 'success')
                 return redirect(url_for('usersTable'))
-            elif registerFormUsersEdit.userPlate.data.capitalize()=="Brak" or registerFormUsersEdit.userPlate.data=="":
+            elif registerFormUsersEdit.userPlate.data.capitalize() == "Brak" or registerFormUsersEdit.userPlate.data == "":
                 userEdit.userPlate = None
                 userEdit.userTag = registerFormUsersEdit.userTag.data
                 db.session.commit()
@@ -433,7 +429,7 @@ def usersTable():
     elif registerFormUsersDel.validate_on_submit():
         try:
             targetIdDel = request.form.get('IDdel')
-            userDel=UsersData.query.get(targetIdDel)
+            userDel=UsersData.query.filter_by(id=targetIdDel).first()
             db.session.delete(userDel)
             db.session.commit()
             flash('Wpis został usunięty', 'success')
@@ -456,7 +452,7 @@ def adminTable():
     if registerFormAdminEdit.validate_on_submit():
         try:
             targetId = request.form.get('ID')
-            adminEdit=Users.query.get(targetId)
+            adminEdit=Users.query.filter_by(id=targetId).first()
 
             if (registerFormAdminEdit.userLogin.data=="Brak" or registerFormAdminEdit.userLogin.data=="" or registerFormAdminEdit.firstName.data=="Brak" or registerFormAdminEdit.firstName.data=="" or registerFormAdminEdit.lastName.data=="Brak" or registerFormAdminEdit.lastName.data==""):
                 flash('Wypełnij wszystkie pola.', 'danger')
@@ -473,7 +469,7 @@ def adminTable():
     elif registerFormAdminDel.validate_on_submit():
         try:
             targetIdDel = request.form.get('IDdel')
-            adminDel=Users.query.get(targetIdDel)
+            adminDel=Users.query.filter_by(id=targetIdDel).first()
             print(current_user.id, targetIdDel)
             if int(targetIdDel)==int(current_user.id):
                 flash('Nie można usunąć swojego konta', 'danger')
@@ -588,15 +584,41 @@ def setTime(user_id):
             pass
     return render_template('setTime.html', title='Godziny dostępu', currentUser=currentUser, hoursForm=hoursForm)
 
+
+#camera view
+camera = cv2.VideoCapture(0)
+def gen_frames():  # generate frame by frame from camera
+    while True:
+        success, frame = camera.read()
+        if success:
+            try:
+                ret, buffer = cv2.imencode('.jpg', cv2.flip(frame, 1))
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            except Exception:
+                pass
+        else:
+            pass
+
+@app.route('/videoFeed')
+@login_required
+def videoFeed():
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 @app.route('/cameraView')
 @login_required
 def cameraView():
-    return render_template('cameraView.html', title='Widok kamery')
+    return render_template('cameraView.html')
+
+
+
+
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(host='0.0.0.0', port=7171, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)
 
 
 
