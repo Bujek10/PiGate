@@ -1,0 +1,1 @@
+Plik zeby git nie wywalil katalugu :))

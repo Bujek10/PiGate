@@ -318,7 +318,7 @@ def registerUsers():
         try:
             if (registerFormUsers.userPlate.data == "" or registerFormUsers.userPlate.data.capitalize() == "Brak")  and (registerFormUsers.userTag.data == "" or registerFormUsers.userTag.data.capitalize() == "Brak"):
                 flash('Dodaj conajmniej jeden sposób autoryzacji', 'danger')
-            elif registerFormUsers.userPlate.data == "":
+            elif (registerFormUsers.userPlate.data.capitalize() == "Brak" or registerFormUsers.userPlate.data == ""):
                 newUserPlate = UsersData(
                     firstName=registerFormUsers.firstName.data.capitalize(),
                     lastName=registerFormUsers.lastName.data.capitalize(),
@@ -330,32 +330,21 @@ def registerUsers():
                 defaultHours(temp.id)
                 flash('Użytkownik został dodany poprawnie', 'success')
                 return redirect(url_for('usersTable'))
-            elif registerFormUsers.userTag.data=="":
+            elif (registerFormUsers.userTag.data.capitalize() == "Brak" or registerFormUsers.userTag.data == ""):
                 newUserPlate = UsersData(
                     firstName=registerFormUsers.firstName.data.capitalize(),
                     lastName=registerFormUsers.lastName.data.capitalize(),
-                    userPlate=registerFormUsers.userPlate.data.upper(),
+                    userPlate=registerFormUsers.userPlate.data.upper()
                 )
                 db.session.add(newUserPlate)
                 db.session.commit()
                 temp = UsersData.query.filter_by(userPlate=registerFormUsers.userPlate.data.upper()).first()
-                print(temp)
                 defaultHours(temp.id)
                 flash('Użytkownik został dodany poprawnie', 'success')
                 return redirect(url_for('usersTable'))
             else:
-                newUserPlate = UsersData(
-                    firstName=registerFormUsers.firstName.data.capitalize(),
-                    lastName=registerFormUsers.lastName.data.capitalize(),
-                    userPlate=registerFormUsers.userPlate.data.upper(),
-                    userTag=registerFormUsers.userTag.data
-                )
-                db.session.add(newUserPlate)
-                db.session.commit()
-                temp = UsersData.query.filter_by(userTag=registerFormUsers.userTag.data).first()
-                defaultHours(temp.id)
-                flash('Użytkownik został dodany poprawnie', 'success')
-                return redirect(url_for('usersTable'))
+                return redirect(url_for('registerUsers'))
+                flash('Błąd zapisu', 'danger')
 
         except Exception:
             db.session.rollback()
@@ -470,7 +459,6 @@ def adminTable():
         try:
             targetIdDel = request.form.get('IDdel')
             adminDel=Users.query.filter_by(id=targetIdDel).first()
-            print(current_user.id, targetIdDel)
             if int(targetIdDel)==int(current_user.id):
                 flash('Nie można usunąć swojego konta', 'danger')
             else:
@@ -592,7 +580,7 @@ def gen_frames():  # generate frame by frame from camera
         success, frame = camera.read()
         if success:
             try:
-                ret, buffer = cv2.imencode('.jpg', cv2.flip(frame, 1))
+                ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
@@ -610,9 +598,6 @@ def videoFeed():
 @login_required
 def cameraView():
     return render_template('cameraView.html')
-
-
-
 
 
 if __name__ == '__main__':
