@@ -9,10 +9,12 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 from datetime import datetime
 import os
 import cv2
+from flask_moment import Moment
+import requests
+import json
 
 
 # konfiguracja bazy danych użytkowników i tablic
-
 baseDir = os.path.abspath(os.path.dirname(__file__))
 # dataFolder = os.path.join(baseDir, 'data')
 # os.mkdir(dataFolder)
@@ -29,6 +31,8 @@ bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'fghjklpoiuy%^&*())(*UYTGHI*&'
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+moment = Moment(app)
+date = datetime.now()
 
 # tabela bazy danych użytkowników
 class Users(db.Model, UserMixin):
@@ -484,7 +488,12 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', title='Dashboard')
+    weatherSource = requests.get('https://danepubliczne.imgw.pl/api/data/synop/station/krakow')
+    weather = json.loads(weatherSource.content)
+    airQualitySource = requests.get('https://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/400')
+    airQuality = json.loads(airQualitySource.content)
+    return render_template('dashboard.html', title='Dashboard', date=date, weather=weather, airQuality=airQuality)
+
 
 @app.route('/passChange', methods=['POST', 'GET'])
 @login_required
@@ -574,8 +583,8 @@ def setTime(user_id):
 
 
 #camera view
-camera = cv2.VideoCapture(0)
 def gen_frames():  # generate frame by frame from camera
+    camera = cv2.VideoCapture(cv2.CAP_V4L2)
     while True:
         success, frame = camera.read()
         if success:
@@ -597,7 +606,7 @@ def videoFeed():
 @app.route('/cameraView')
 @login_required
 def cameraView():
-    return render_template('cameraView.html')
+    return render_template('cameraView.html')   
 
 
 if __name__ == '__main__':

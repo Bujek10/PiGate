@@ -1,7 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% block scripts %}
     {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.locale('pl') }}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('.static', filename='cards.css') }}">
+    <script src="{{ url_for('.static', filename='timeNow.js') }}"></script>
 {% endblock %}
 {% block title %} Smart Gate Management Project - {{ title }}{% endblock %}
 {% block navbar %}
@@ -11,6 +15,7 @@
         {% include "includes/navbar.html" %}
     {% endif %}
 {% endblock %}
+{% block body_attribs %} onload="startTime()" {% endblock %}
 {%  block content %}
         <div class="container">
             <div class="row">
@@ -33,4 +38,206 @@
                 <h2 style="text-align: center">Home</h2>
             </div>
         </div>
+        <div class="px-3">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card text-center rounded-4 shadow-sm pt-3" style="height: 150px;">
+                            <div class="card-body">
+                                <p id="timeNow" class="display-5 p-0 m-0"></p>
+                                <p class="h5 fw-light p-0 m-0">{{ moment(date).format('dddd DD MMMM YYYY') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card card-margin rounded-4 shadow-sm" style="height: 150px;">
+                            <div class="card-header no-border">
+                                <h5 class="card-title">Pogoda</h5>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="widget-49">
+                                    <div class="widget-49-title-wrapper">
+                                        <div class="widget-49-date-primary mx-1">
+                                            <span class="widget-49-date-day">{{ weather['temperatura'] }}</span>
+                                            <span class="widget-49-date-month">&deg;C</span>
+                                        </div>
+                                        <div class="widget-49-date-danger mx-1">
+                                            <span class="widget-49-date-day">{{ weather['wilgotnosc_wzgledna'] }}</span>
+                                            <span class="widget-49-date-month">%</span>
+                                        </div>
+                                        <div class="widget-49-date-dark mx-1">
+                                            <span class="widget-49-date-day">{{ weather['suma_opadu'] }}</span>
+                                            <span class="widget-49-date-month">mm</span>
+                                        </div>
+                                        <div class="widget-49-date-success mx-1">
+                                            <span class="widget-49-date-day">{{ weather['cisnienie'] | int }}</span>
+                                            <span class="widget-49-date-month">hPa</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card card-margin rounded-4 shadow-sm" style="height: 150px;">
+                            <div class="card-header no-border">
+                                <h5 class="card-title">Jakość powietrza</h5>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="widget-49">
+                                    <div class="widget-49-title-wrapper">
+                                        <!-- ogólny stan powietrza -->
+                                        {% if airQuality['stIndexLevel']['indexLevelName'] == 'Bardzo dobry' %}
+                                            <div class="widget-49-date-success mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['stIndexLevel']['indexLevelName'] }}
+                                                </span>
+                                            </div>
+                                        {% elif airQuality['stIndexLevel']['indexLevelName'] == 'Dobry' %}
+                                            <div class="widget-49-date-success mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['stIndexLevel']['indexLevelName'] }}
+                                                </span>
+                                            </div>
+                                        {% elif airQuality['stIndexLevel']['indexLevelName'] == 'Umiarkowany' %}
+                                            <div class="widget-49-date-warning mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['stIndexLevel']['indexLevelName'] }}
+                                                </span>
+                                            </div>
+                                        {% elif airQuality['stIndexLevel']['indexLevelName'] == 'Dostateczny' %}
+                                            <div class="widget-49-date-warning mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['stIndexLevel']['indexLevelName'] }}
+                                                </span>
+                                            </div>
+                                        {% elif airQuality['stIndexLevel']['indexLevelName'] == 'Zły' %}
+                                            <div class="widget-49-date-danger mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['stIndexLevel']['indexLevelName'] }}
+                                                </span>
+                                            </div>
+                                        {% elif airQuality['stIndexLevel']['indexLevelName'] == 'Bardzo zły' %}
+                                            <div class="widget-49-date-danger mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['stIndexLevel']['indexLevelName'] }}
+                                                </span>
+                                            </div>
+                                        {% else %}
+                                            <div class="widget-49-date-light mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['stIndexLevel']['indexLevelName'] }}
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                        <!-- PM 10 -->
+                                        {% if airQuality['pm10IndexLevel']['indexLevelName'] == 'Bardzo dobry' %}
+                                            <div class="widget-49-date-success mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm10IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM10</span>
+                                            </div>
+                                        {% elif airQuality['pm10IndexLevel']['indexLevelName'] == 'Dobry' %}
+                                            <div class="widget-49-date-success mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm10IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM10</span>
+                                            </div>
+                                        {% elif airQuality['pm10IndexLevel']['indexLevelName'] == 'Umiarkowany' %}
+                                            <div class="widget-49-date-warning mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm10IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM10</span>
+                                            </div>
+                                        {% elif airQuality['pm10IndexLevel']['indexLevelName'] == 'Dostateczny' %}
+                                            <div class="widget-49-date-warning mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm10IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM10</span>
+                                            </div>
+                                        {% elif airQuality['pm10IndexLevel']['indexLevelName'] == 'Zły' %}
+                                            <div class="widget-49-date-danger mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm10IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM10</span>
+                                            </div>
+                                        {% elif airQuality['pm10IndexLevel']['indexLevelName'] == 'Bardzo zły' %}
+                                            <div class="widget-49-date-danger mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm10IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM10</span>
+                                            </div>
+                                        {% else %}
+                                            <div class="widget-49-date-light mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm10IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM10</span>
+                                            </div>
+                                        {% endif %}
+                                        <!-- PM 2.5 -->
+                                        {% if airQuality['pm25IndexLevel']['indexLevelName'] == 'Bardzo dobry' %}
+                                            <div class="widget-49-date-success mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm25IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM2.5</span>
+                                            </div>
+                                        {% elif airQuality['pm25IndexLevel']['indexLevelName'] == 'Dobry' %}
+                                            <div class="widget-49-date-success mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm25IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM2.5</span>
+                                            </div>
+                                        {% elif airQuality['pm25IndexLevel']['indexLevelName'] == 'Umiarkowany' %}
+                                            <div class="widget-49-date-warning mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm25IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM2.5</span>
+                                            </div>
+                                        {% elif airQuality['pm25IndexLevel']['indexLevelName'] == 'Dostateczny' %}
+                                            <div class="widget-49-date-warning mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm25IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM2.5</span>
+                                            </div>
+                                        {% elif airQuality['pm25IndexLevel']['indexLevelName'] == 'Zły' %}
+                                            <div class="widget-49-date-danger mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm25IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM2.5</span>
+                                            </div>
+                                        {% elif airQuality['pm25IndexLevel']['indexLevelName'] == 'Bardzo zły' %}
+                                            <div class="widget-49-date-danger mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm25IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM2.5</span>
+                                            </div>
+                                        {% else %}
+                                            <div class="widget-49-date-light mx-1">
+                                                <span class="widget-49-date-day text-center" style="font-size: 12pt; text-wrap: normal;">
+                                                    {{ airQuality['pm25IndexLevel']['indexLevelName'] }}
+                                                </span>
+                                                <span class="widget-49-date-month mt-1" style="font-size: 10pt;">PM2.5</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 {% endblock %}
